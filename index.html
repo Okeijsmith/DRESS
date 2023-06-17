@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>&lt;model-viewer&gt; template</title>
+    <meta charset="utf-8">
+    <meta name="description" content="&lt;model-viewer&gt; template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" href="./styles.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <!-- <model-viewer> HTML element -->
+    <model-viewer id="DRESS" src="dress.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="0.78" exposure="0.89" shadow-softness="1" auto-rotate camera-target="0.01m 1.004m 0.05911m">
+      <div class="progress-bar hide" slot="progress-bar">
+          <div class="update-bar"></div>
+      </div>
+      <button slot="ar-button" id="ar-button">
+          View in your space
+      </button>
+      <div id="ar-prompt">
+          <img src="ar_hand_prompt.png">
+      </div>
+      <div class="controls">
+       <div>
+      <p>Diffuse</p>
+      <select id="diffuse">
+        <option value="textures/bridal.png">Style 1</option>
+        <option value="textures/1dr.png">Style 2</option>
+        <option value="textures/linen.jpg">Style 3</option>
+      </select>
+    </div>
+    </div>
+    <div>
+
+    </model-viewer>  
+    <script type="module">
+      const modelViewerTexture1 = document.querySelector("model-viewer#DRESS");
+      
+      modelViewerTexture1.addEventListener("load", () => {
+      
+        const material = modelViewerTexture1.model.materials[0];
+      
+        const createAndApplyTexture = async (channel, event) => {
+          const texture = await modelViewerTexture1.createTexture(event.target.value);
+          if (channel.includes('base') || channel.includes('metallic')) {
+            material.pbrMetallicRoughness[channel].setTexture(texture);
+          } else {
+            material[channel].setTexture(texture);
+          }
+        }
+      
+        
+      
+      
+      
+       
+      
+        document.querySelector('#diffuse').addEventListener('input', (event) => {
+          createAndApplyTexture('baseColorTexture', event);
+        });
+      
+      });
+      
+      </script>
+    <script src="script.js"></script>
+    
+    <!-- Loads <model-viewer> for browsers: -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.1/model-viewer.min.js"></script>
+  </body>
+</html>
